@@ -1,7 +1,7 @@
 {
-   "version": 1
-   "min_cloud_sdk_version": "240.0.0"
-   "has_client_cert": true
-   "endpoint_verification_error": ""
+   "version": 1,
+   "min_cloud_sdk_version": "240.0.0",
+   "has_client_cert": true,
+   "endpoint_verification_error": "",
    "cert_provider_command": "echo $CLIENT_CERTIFICATE"
 }
