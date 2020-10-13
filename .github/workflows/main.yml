@@ -1,0 +1,42 @@
+# This is a basic workflow to help you get started with Actions
+
+name: DCA-Testing
+
+# Controls when the action will run.
+on:
+  [workflow_dispatch]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build-test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.13.1'
+  pubsub-test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    # Runs a single command using the runners shell
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Pubsub DCA Test
+      env:
+        GOLANG_SAMPLES_PROJECT_ID: ${{ secrets.GOLANG_SAMPLES_PROJECT_ID }}
+        CLIENT_CERTIFICATE: ${{ secrets.CLIENT_CERTIFICATE }}
+        CREDENTIALS: ${{ secrets.CREDENTIALS }}
+        GOOGLE_API_USE_MTLS: 1
+        GOLANG_SAMPLES_E2E_TEST: 1
+        TESTING_DIR: pubsub
+        RUN_ALL_TESTS: 0
+      run: ./testing/dca/system_tests.sh

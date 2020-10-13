@@ -93,13 +93,13 @@ func testContext() (Context, error) {
 	if err != nil {
 		return tc, fmt.Errorf("could not find current directory")
 	}
-	if !strings.Contains(dir, "google-dca-testing") {
-		return tc, fmt.Errorf("could not find google-dca-testing directory")
+	if !strings.Contains(dir, "google-dca-test") {
+		return tc, fmt.Errorf("could not find google-dca-test directory")
 	}
-	tc.Dir = dir[:strings.Index(dir, "google-dca-testing")+len("google-dca-testing")]
+	tc.Dir = dir[:strings.Index(dir, "google-dca-test")+len("google-dca-test")]
 
 	if tc.Dir == "" {
-		return tc, fmt.Errorf("could not find google-dca-testing directory")
+		return tc, fmt.Errorf("could not find google-dca-test directory")
 	}
 
 	return tc, nil
