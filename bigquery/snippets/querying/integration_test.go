@@ -106,66 +106,6 @@ func TestQueries(t *testing.T) {
 				t.Errorf("queryWithDestination: %v", err)
 			}
 		})
-		t.Run("queryWithDestinationCMEK", func(t *testing.T) {
-			if bqtestutil.SkipCMEKTests() {
-				t.Skip("skipping CMEK tests")
-			}
-			t.Parallel()
-			tableID := "bigquery_query_destination_table_cmek"
-			if err := queryWithDestinationCMEK(ioutil.Discard, tc.ProjectID, testDatasetID, tableID); err != nil {
-				t.Errorf("queryWithDestinationCMEK: %v", err)
-			}
-		})
-		t.Run("queryWithArrayParams", func(t *testing.T) {
-			t.Parallel()
-			if err := queryWithArrayParams(ioutil.Discard, tc.ProjectID); err != nil {
-				t.Errorf("queryWithArrayParams: %v", err)
-			}
-		})
-		t.Run("queryWithNamedParams", func(t *testing.T) {
-			t.Parallel()
-			if err := queryWithNamedParams(ioutil.Discard, tc.ProjectID); err != nil {
-				t.Errorf("queryWithNamedParams: %v", err)
-			}
-		})
-		t.Run("queryWithPositionalParams", func(t *testing.T) {
-			t.Parallel()
-			if err := queryWithPositionalParams(ioutil.Discard, tc.ProjectID); err != nil {
-				t.Errorf("queryWithPositionalParams: %v", err)
-			}
-		})
-		t.Run("queryWithStructParam", func(t *testing.T) {
-			t.Parallel()
-			if err := queryWithStructParam(ioutil.Discard, tc.ProjectID); err != nil {
-				t.Errorf("queryWithStructParam: %v", err)
-			}
-		})
-		t.Run("queryWithTimestampParam", func(t *testing.T) {
-			t.Parallel()
-			if err := queryWithTimestampParam(ioutil.Discard, tc.ProjectID); err != nil {
-				t.Errorf("queryWithTimestampParam: %v", err)
-			}
-		})
-		t.Run("queryPartitionedTable", func(t *testing.T) {
-			t.Parallel()
-			tableID := "bigquery_query_partitioned_table"
-			if err := preparePartitionedData(tc.ProjectID, testDatasetID, tableID); err != nil {
-				t.Fatalf("couldn't setup clustered table: %v", err)
-			}
-			if err := queryPartitionedTable(ioutil.Discard, tc.ProjectID, testDatasetID, tableID); err != nil {
-				t.Errorf("queryPartitionedTable: %v", err)
-			}
-		})
-		t.Run("queryClusteredTable", func(t *testing.T) {
-			t.Parallel()
-			tableID := "bigquery_query_clustered_table"
-			if err := prepareClusteredData(tc.ProjectID, testDatasetID, tableID); err != nil {
-				t.Fatalf("couldn't setup clustered table: %v", err)
-			}
-			if err := queryClusteredTable(ioutil.Discard, tc.ProjectID, testDatasetID, tableID); err != nil {
-				t.Errorf("queryClusteredTable: %v", err)
-			}
-		})
 	})
 
 }
