@@ -29,7 +29,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 )
 
 // TestObjects runs all samples tests of the package.

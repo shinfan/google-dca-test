@@ -4,10 +4,10 @@
 1. [Install Go](https://golang.org/doc/install).
 1. Get the package:
 
-    `go get -d github.com/GoogleCloudPlatform/golang-samples`
+    `go get -d github.com/shinfan/google-dca-test`
 1. Change into the checked out source:
 
-    `cd $(go env GOPATH)/src/github.com/GoogleCloudPlatform/golang-samples`
+    `cd $(go env GOPATH)/src/github.com/shinfan/google-dca-test`
 1. Fork the repo.
 1. Set your fork as a remote:
 
@@ -37,10 +37,10 @@ The following style guidelines are specific to writing Go samples.
 
 Canonical samples:
 
-* Veneer client library with complex request: [`inspect_string.go`](https://github.com/GoogleCloudPlatform/golang-samples/blob/master/dlp/snippets/inspect/inspect_string.go)
-* Apiary client with normal request: [`dicom_store_create.go`](https://github.com/GoogleCloudPlatform/golang-samples/blob/master/healthcare/dicom_store_create.go)
-* Apiary client with complex request: [`fhir_resource_create.go`](https://github.com/GoogleCloudPlatform/golang-samples/blob/master/healthcare/fhir_resource_create.go)
-* Apiary client with file I/O: [`dicomweb_instance_store.go`](https://github.com/GoogleCloudPlatform/golang-samples/blob/master/healthcare/dicomweb_instance_store.go)
+* Veneer client library with complex request: [`inspect_string.go`](https://github.com/shinfan/google-dca-test/blob/master/dlp/snippets/inspect/inspect_string.go)
+* Apiary client with normal request: [`dicom_store_create.go`](https://github.com/shinfan/google-dca-test/blob/master/healthcare/dicom_store_create.go)
+* Apiary client with complex request: [`fhir_resource_create.go`](https://github.com/shinfan/google-dca-test/blob/master/healthcare/fhir_resource_create.go)
+* Apiary client with file I/O: [`dicomweb_instance_store.go`](https://github.com/shinfan/google-dca-test/blob/master/healthcare/dicomweb_instance_store.go)
 
 ## One file per sample
 
@@ -110,7 +110,7 @@ func hello(w io.Writer) {
 
 The output can be verified during testing using a buffer.
 
-[inspect_test.go](https://github.com/GoogleCloudPlatform/golang-samples/blob/master/dlp/snippets/inspect/inspect_test.go)
+[inspect_test.go](https://github.com/shinfan/google-dca-test/blob/master/dlp/snippets/inspect/inspect_test.go)
 ```go
 func TestInspectString(t *testing.T) {
 	tc := testutil.SystemTest(t)
@@ -324,7 +324,7 @@ import (
 
 One file in the sample package should have a package comment. The comment is
 shown as a description on
-https://godoc.org/github.com/GoogleCloudPlatform/golang-samples. If there are
+https://godoc.org/github.com/shinfan/google-dca-test. If there are
 many files/samples in the package, it's common to create a `doc.go` file that
 only has the package comment. The comment should start with
 `Package packagename`.
@@ -401,10 +401,10 @@ resource names that incorporate aspects of your test, such as `tc.ProjectID +
    Tests are authenticated using [Application Default Credentials](https://developers.google.com/identity/protocols/application-default-credentials).
 1. Install the test dependencies:
 
-    `go get -t -d github.com/GoogleCloudPlatform/golang-samples/...`
+    `go get -t -d github.com/shinfan/google-dca-test/...`
 1. Run the tests:
 
-    `go test github.com/GoogleCloudPlatform/golang-samples/...`
+    `go test github.com/shinfan/google-dca-test/...`
 
 Note: You may want to `cd` to the directory you're modifying and run
 `go test -v ./...` to avoid running every test in the repo.

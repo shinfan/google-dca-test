@@ -1,4 +1,4 @@
-module github.com/GoogleCloudPlatform/golang-samples/cloudsql/sqlserver/database-sql
+module github.com/shinfan/google-dca-test/cloudsql/sqlserver/database-sql
 
 go 1.11
 

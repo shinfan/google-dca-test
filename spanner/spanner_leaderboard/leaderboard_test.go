@@ -23,7 +23,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 	adminpb "google.golang.org/genproto/googleapis/spanner/admin/database/v1"
 )
 

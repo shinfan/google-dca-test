@@ -11,7 +11,7 @@ Please visit https://cloud.google.com/docs/authentication/getting-started
 ## Installing it
 
 ```shell
-go get -u github.com/GoogleCloudPlatform/golang-samples/storage/gcsupload
+go get -u github.com/shinfan/google-dca-test/storage/gcsupload
 ```
 
 

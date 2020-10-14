@@ -24,7 +24,7 @@ import (
 
 	dataproc "cloud.google.com/go/dataproc/apiv1"
 	"cloud.google.com/go/storage"
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	dataprocpb "google.golang.org/genproto/googleapis/cloud/dataproc/v1"

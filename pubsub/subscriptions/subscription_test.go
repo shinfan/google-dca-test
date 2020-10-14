@@ -28,7 +28,7 @@ import (
 	"cloud.google.com/go/iam"
 	"cloud.google.com/go/pubsub"
 
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 	"github.com/google/go-cmp/cmp"
 )
 

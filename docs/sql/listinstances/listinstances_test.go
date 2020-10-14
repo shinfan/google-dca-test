@@ -17,7 +17,7 @@ package listinstances
 import (
 	"testing"
 
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 )
 
 func TestListInstances(t *testing.T) {

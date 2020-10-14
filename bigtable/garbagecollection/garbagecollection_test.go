@@ -23,7 +23,7 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigtable"
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 	"github.com/google/uuid"
 )
 

@@ -23,8 +23,8 @@ import (
 	"time"
 
 	"cloud.google.com/go/bigquery"
-	"github.com/GoogleCloudPlatform/golang-samples/bigquery/snippets/bqtestutil"
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/bigquery/snippets/bqtestutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 )
 
 func TestQueries(t *testing.T) {

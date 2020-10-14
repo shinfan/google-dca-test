@@ -28,7 +28,7 @@ import (
 
 	database "cloud.google.com/go/spanner/admin/database/apiv1"
 	instance "cloud.google.com/go/spanner/admin/instance/apiv1"
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 	"github.com/google/uuid"
 	"google.golang.org/api/iterator"
 	adminpb "google.golang.org/genproto/googleapis/spanner/admin/database/v1"
@@ -304,7 +304,7 @@ func TestSample(t *testing.T) {
 	assertContains(t, out, "42 Venue 42")
 
 	// Wait 5 seconds to avoid a time drift issue for the next query:
-	// https://github.com/GoogleCloudPlatform/golang-samples/issues/1146.
+	// https://github.com/shinfan/google-dca-test/issues/1146.
 	time.Sleep(time.Second * 5)
 	out = runSample(t, queryWithTimestampParameter, dbName, "failed to query with timestamp parameter")
 	assertContains(t, out, "4 Venue 4")

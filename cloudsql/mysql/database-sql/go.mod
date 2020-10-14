@@ -1,4 +1,4 @@
-module github.com/GoogleCloudPlatform/golang-samples/cloudsql/mysql/database-sql
+module github.com/shinfan/google-dca-test/cloudsql/mysql/database-sql
 
 go 1.13
 

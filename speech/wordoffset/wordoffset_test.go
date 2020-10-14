@@ -21,7 +21,7 @@ import (
 	"testing"
 
 	speech "cloud.google.com/go/speech/apiv1"
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 )
 
 func TestSyncLocal(t *testing.T) {

@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/datastore"
-	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+	"github.com/shinfan/google-dca-test/internal/testutil"
 )
 
 var client *datastore.Client
