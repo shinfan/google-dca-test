@@ -8,7 +8,6 @@ env:
   GOLANG_SAMPLES_PROJECT_ID: shinfan-mtls-demo
   CLIENT_CERTIFICATE: ${{ secrets.CLIENT_CERTIFICATE }}
   CREDENTIALS: ${{ secrets.CREDENTIALS }}
-  GOOGLE_API_USE_MTLS: 1
   GOOGLE_API_USE_CLIENT_CERTIFICATE: true
   GOLANG_SAMPLES_E2E_TEST: 1
   RUN_ALL_TESTS: 0
@@ -24,6 +23,19 @@ jobs:
     - name: Cloud Pubsub DCA Test
       env:
         TESTING_DIR: pubsub
+      run: ./testing/dca/system_tests.sh
+  pubsub-no-cert-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Pubsub DCA Test
+      env:
+        TESTING_DIR: pubsub
+        NEGATIVE_TEST: 1
+        GOOGLE_API_USE_CLIENT_CERTIFICATE: false
       run: ./testing/dca/system_tests.sh
   kms-test:
     runs-on: ubuntu-latest

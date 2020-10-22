@@ -155,7 +155,8 @@ func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.C
 				grpc.WithDefaultServiceConfig(`{"loadBalancingConfig":[{"grpclb":{"childPolicy":[{"pick_first":{}}]}}]}`),
 			}
 			// TODO(cbro): add support for system parameters (quota project, request reason) via chained interceptor.
-		} else {
+		} else if (clientCertSource != nil) {
+			// MTLS is enabled
 			serverName := strings.Split(endpoint, ":")[0]
 			if err != nil {
 				return nil, err
@@ -176,6 +177,15 @@ func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.C
 					requestReason: o.RequestReason,
 				}),
 				grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)),
+			}
+		} else {
+			grpcOpts = []grpc.DialOption{
+				grpc.WithPerRPCCredentials(grpcTokenSource{
+					TokenSource:   oauth.TokenSource{creds.TokenSource},
+					quotaProject:  o.QuotaProject,
+					requestReason: o.RequestReason,
+				}),
+				grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
 			}
 		}
 	}

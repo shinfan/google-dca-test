@@ -124,4 +124,12 @@ else
   done
 fi
 
+if [[ $NEGATIVE_TEST = "1" ]]; then
+  if [[ $exit_code = 0 ]]; then
+    exit_code=1
+  else
+    exit_code=0
+  fi
+fi
+
 exit $exit_code
