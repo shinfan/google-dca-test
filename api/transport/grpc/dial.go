@@ -108,6 +108,7 @@ func DialPool(ctx context.Context, opts ...option.ClientOption) (ConnPool, error
 }
 
 func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.ClientConn, error) {
+	println("Starting dial")
 	if o.HTTPClient != nil {
 		return nil, errors.New("unsupported HTTP client specified")
 	}
@@ -115,7 +116,7 @@ func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.C
 		return o.GRPCConn, nil
 	}
 	clientCertSource, endpoint, err := dca.GetClientCertificateSourceAndEndpoint(o)
-
+	println(clientCertSource)
 	if err != nil {
 		return nil, err
 	}

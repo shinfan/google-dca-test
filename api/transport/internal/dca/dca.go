@@ -44,6 +44,7 @@ const (
 // getClientCertificateSource and getEndpoint sequentially and returns the client
 // cert source and endpoint as a tuple.
 func GetClientCertificateSourceAndEndpoint(settings *internal.DialSettings) (cert.Source, string, error) {
+	println("GetClientCertificateSourceAndEndpoint")
 	clientCertSource, err := getClientCertificateSource(settings)
 	if err != nil {
 		return nil, "", err
@@ -52,6 +53,7 @@ func GetClientCertificateSourceAndEndpoint(settings *internal.DialSettings) (cer
 	if err != nil {
 		return nil, "", err
 	}
+	println("clientCertSource: " + clientCertSource)
 	return clientCertSource, endpoint, nil
 }
 
@@ -73,7 +75,6 @@ func getClientCertificateSource(settings *internal.DialSettings) (cert.Source, e
 	} else if settings.ClientCertSource != nil {
 		return settings.ClientCertSource, nil
 	} else {
-		println("return DefaultSource")
 		return cert.DefaultSource()
 	}
 }
