@@ -48,3 +48,16 @@ jobs:
       env:
         TESTING_DIR: kms
       run: ./testing/dca/system_tests.sh
+  kms-no-cert-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud KMS DCA Test
+      env:
+        TESTING_DIR: kms
+        NEGATIVE_TEST: 1
+        GOOGLE_API_USE_CLIENT_CERTIFICATE: false
+      run: ./testing/dca/system_tests.sh
