@@ -13,16 +13,8 @@ env:
   RUN_ALL_TESTS: 0
 
 jobs:
-  build-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
-        with:
-          go-version: '^1.13.1'
   pubsub-test:
     runs-on: ubuntu-latest
-    needs: build-test
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2

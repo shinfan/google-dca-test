@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "git": {
+        "name": ".",
+        "remote": "https://github.com/googleapis/google-api-go-client.git",
+        "sha": "0a77335b68ee0dbe83a16c60a8a9426a4dfba370"
+      }
+    }
+  ]
+}

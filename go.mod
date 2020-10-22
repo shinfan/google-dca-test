@@ -2,7 +2,7 @@ module github.com/shinfan/google-dca-test
 
 go 1.11
 
-replace google.golang.org/api => ../api
+replace google.golang.org/api => ./api
 
 require (
 	cloud.google.com/go v0.70.0
