@@ -74,7 +74,6 @@ runSamples() {
   set +x
   echo "Running 'go test' in '$(pwd)'..."
   set -x
-  2>&1 go run -timeout $TIMEOUT -v "${1:-./...}"
   2>&1 go test -timeout $TIMEOUT -v "${1:-./...}"
   exit_code=$((exit_code + $?))
   set +x
