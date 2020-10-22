@@ -53,7 +53,6 @@ func GetClientCertificateSourceAndEndpoint(settings *internal.DialSettings) (cer
 	if err != nil {
 		return nil, "", err
 	}
-	println("clientCertSource: " + clientCertSource)
 	return clientCertSource, endpoint, nil
 }
 

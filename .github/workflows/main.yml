@@ -23,3 +23,4 @@ jobs:
     - name: Cloud Pubsub DCA Test
       env:
         TESTING_DIR: pubsub
+      run: ./testing/dca/system_tests.sh
