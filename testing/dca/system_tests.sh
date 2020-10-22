@@ -68,12 +68,13 @@ cp ./testing/dca/context_aware_metadata.json ~/.secureConnect/context_aware_meta
 exit_code=0
 set +e # Don't exit on errors to make sure we run all tests.
 
-# runTests runs the tests in the current directory. If an argument is specified,
+# runSamples runs the tests in the current directory. If an argument is specified,
 # it is used as the argument to `go test`.
-runTests() {
+runSamples() {
   set +x
   echo "Running 'go test' in '$(pwd)'..."
   set -x
+  2>&1 go run -timeout $TIMEOUT -v "${1:-./...}"
   2>&1 go test -timeout $TIMEOUT -v "${1:-./...}"
   exit_code=$((exit_code + $?))
   set +x
@@ -96,7 +97,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
   # shellcheck disable=SC2044
   for i in $(find . -name go.mod); do
     pushd "$(dirname "$i")" > /dev/null;
-      runTests
+      runSamples
     popd > /dev/null;
   done
 else
@@ -106,7 +107,7 @@ else
     # If there are no modules, just run the tests directly.
     if [[ -z "$mods" ]]; then
       pushd "$d" > /dev/null;
-        runTests
+        runSamples
       popd > /dev/null;
     # Otherwise, run the tests in all Go directories. This way, we don't have to
     # check to see if there are tests that aren't in a sub-module.
@@ -115,7 +116,7 @@ else
       if [[ -n "$goDirectories" ]]; then
         for gd in $goDirectories; do
           pushd "$gd" > /dev/null;
-            runTests .
+            runSamples .
           popd > /dev/null;
         done
       fi

@@ -21,13 +21,14 @@ import (
 	"io"
 
 	"cloud.google.com/go/pubsub"
+	"google.golang.org/api/option"
 )
 
 func create(w io.Writer, projectID, topicID string) error {
 	// projectID := "my-project-id"
 	// topicID := "my-topic"
 	ctx := context.Background()
-	client, err := pubsub.NewClient(ctx, projectID)
+	client, err := pubsub.NewClient(ctx, projectID, option.WithEndpoint("pubsub.mtls.googleapis.com:443"))
 	if err != nil {
 		return fmt.Errorf("pubsub.NewClient: %v", err)
 	}
