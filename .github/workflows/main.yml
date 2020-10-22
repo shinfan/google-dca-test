@@ -5,7 +5,7 @@ on:
   [workflow_dispatch]
 
 env:
-  GOLANG_SAMPLES_PROJECT_ID: ${{ secrets.GOLANG_SAMPLES_PROJECT_ID }}
+  GOLANG_SAMPLES_PROJECT_ID: shinfan-mtls-demo
   CLIENT_CERTIFICATE: ${{ secrets.CLIENT_CERTIFICATE }}
   CREDENTIALS: ${{ secrets.CREDENTIALS }}
   GOOGLE_API_USE_MTLS: 1
