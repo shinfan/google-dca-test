@@ -96,9 +96,13 @@ func validateMetadata(metadata secureConnectMetadata) error {
 
 func (s *secureConnectSource) getClientCertificate(info *tls.CertificateRequestInfo) (*tls.Certificate, error) {
 	// TODO(cbro): consider caching valid certificates rather than exec'ing every time.
-	command := s.metadata.Cmd
-	data, err := exec.Command(command[0], command[1:]...).Output()
+    for i := 0; i < len(s.metadata.Cmd); i++ {
+        s.metadata.Cmd[i] = os.ExpandEnv(s.metadata.Cmd[i])
+    }
+	command := exec.Command(s.metadata.Cmd[0], s.metadata.Cmd[1:]...)
+	data, err := command.Output()
 	if err != nil {
+		println(err.Error())
 		// TODO(cbro): read stderr for error message? Might contain sensitive info.
 		return nil, err
 	}
