@@ -25,6 +25,7 @@ import (
 	kms "cloud.google.com/go/kms/apiv1"
 	"github.com/gofrs/uuid"
 	"google.golang.org/api/iterator"
+	"google.golang.org/api/option"
 	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 	fieldmask "google.golang.org/genproto/protobuf/field_mask"
 	grpccodes "google.golang.org/grpc/codes"
@@ -48,7 +49,7 @@ func NewKMSFixture(projectID string) (*kmsFixture, error) {
 	var k kmsFixture
 	var err error
 
-	k.client, err = kms.NewKeyManagementClient(context.Background())
+	k.client, err = kms.NewKeyManagementClient(context.Background(), option.WithEndpoint("cloudkms.mtls.googleapis.com:443"))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create kms client: %v", err)
 	}

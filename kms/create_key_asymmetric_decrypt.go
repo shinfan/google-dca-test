@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io"
 
+	"google.golang.org/api/option"
 	kms "cloud.google.com/go/kms/apiv1"
 	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 )
@@ -32,7 +33,7 @@ func createKeyAsymmetricDecrypt(w io.Writer, parent, id string) error {
 
 	// Create the client.
 	ctx := context.Background()
-	client, err := kms.NewKeyManagementClient(ctx)
+	client, err := kms.NewKeyManagementClient(ctx, option.WithEndpoint("cloudkms.mtls.googleapis.com:443"))
 	if err != nil {
 		return fmt.Errorf("failed to create kms client: %v", err)
 	}

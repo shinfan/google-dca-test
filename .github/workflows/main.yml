@@ -25,3 +25,14 @@ jobs:
       env:
         TESTING_DIR: pubsub
       run: ./testing/dca/system_tests.sh
+  kms-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud KMS DCA Test
+      env:
+        TESTING_DIR: kms
+      run: ./testing/dca/system_tests.sh
