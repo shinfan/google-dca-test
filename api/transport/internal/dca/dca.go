@@ -73,6 +73,7 @@ func getClientCertificateSource(settings *internal.DialSettings) (cert.Source, e
 	} else if settings.ClientCertSource != nil {
 		return settings.ClientCertSource, nil
 	} else {
+		println("return DefaultSource")
 		return cert.DefaultSource()
 	}
 }

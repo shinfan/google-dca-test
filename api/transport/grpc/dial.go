@@ -115,6 +115,7 @@ func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.C
 		return o.GRPCConn, nil
 	}
 	clientCertSource, endpoint, err := dca.GetClientCertificateSourceAndEndpoint(o)
+
 	if err != nil {
 		return nil, err
 	}
@@ -157,14 +158,18 @@ func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.C
 			// TODO(cbro): add support for system parameters (quota project, request reason) via chained interceptor.
 		} else {
 			serverName := strings.Split(endpoint, ":")[0]
+			println(serverName)
 			if err != nil {
 				return nil, err
 			}
+			println("Starting to get the cert")
+			println(clientCertSource)
 			cert, err := clientCertSource(nil)
 			if err != nil {
 				println(err)
 				return nil, err
 			}
+			println("Got the cert")
 			tlsConfig := &tls.Config{
 				ServerName: serverName,
 				Certificates: []tls.Certificate{*cert},

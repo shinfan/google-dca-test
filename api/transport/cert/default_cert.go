@@ -44,6 +44,7 @@ type Source func(*tls.CertificateRequestInfo) (*tls.Certificate, error)
 //
 // If that file does not exist, a nil source is returned.
 func DefaultSource() (Source, error) {
+	println("Start: DefaultSource")
 	defaultSourceOnce.Do(func() {
 		defaultSource, defaultSourceErr = newSecureConnectSource()
 	})
@@ -60,6 +61,7 @@ type secureConnectMetadata struct {
 
 // newSecureConnectSource creates a secureConnectSource by reading the well-known file.
 func newSecureConnectSource() (Source, error) {
+	println("Start: newSecureConnectSource")
 	user, err := user.Current()
 	if err != nil {
 		// Ignore.
@@ -82,6 +84,8 @@ func newSecureConnectSource() (Source, error) {
 	if err := validateMetadata(metadata); err != nil {
 		return nil, fmt.Errorf("cert: invalid config in %q: %v", filename, err)
 	}
+	println("End: newSecureConnectSource")
+
 	return (&secureConnectSource{
 		metadata: metadata,
 	}).getClientCertificate, nil
@@ -95,9 +99,12 @@ func validateMetadata(metadata secureConnectMetadata) error {
 }
 
 func (s *secureConnectSource) getClientCertificate(info *tls.CertificateRequestInfo) (*tls.Certificate, error) {
+	println("Start: getClientCertificate")
+	println(len(s.metadata.Cmd))
 	// TODO(cbro): consider caching valid certificates rather than exec'ing every time.
     for i := 0; i < len(s.metadata.Cmd); i++ {
         s.metadata.Cmd[i] = os.ExpandEnv(s.metadata.Cmd[i])
+        println(s.metadata.Cmd[i])
     }
 	command := exec.Command(s.metadata.Cmd[0], s.metadata.Cmd[1:]...)
 	data, err := command.Output()
@@ -110,5 +117,6 @@ func (s *secureConnectSource) getClientCertificate(info *tls.CertificateRequestI
 	if err != nil {
 		return nil, err
 	}
+	println("End: getClientCertificate")
 	return &cert, nil
 }
