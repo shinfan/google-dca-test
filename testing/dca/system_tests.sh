@@ -62,7 +62,12 @@ pwd
 
 mkdir -p ~/.secureConnect/
 cp ./testing/dca/context_aware_metadata.json ~/.secureConnect/context_aware_metadata.json
-cp ./testing/dca/cert ~/cert
+
+if [[ $USE_INVALID_CERT = 1 ]]; then
+  cp ./testing/dca/invalid_cert ~/cert
+else
+  cp ./testing/dca/cert ~/cert
+fi
 
 # exit_code collects all of the exit codes of the tests, and is used to set the
 # exit code at the end of the script.
