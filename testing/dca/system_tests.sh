@@ -47,9 +47,9 @@ export SCC_PUBSUB_PROJECT="project-a-id"
 export SCC_PUBSUB_TOPIC="projects/project-a-id/topics/notifications-sample-topic"
 export SCC_PUBSUB_SUBSCRIPTION="notification-sample-subscription"
 
-export GOLANG_SAMPLES_SPANNER=projects/golang-samples-tests/instances/golang-samples-tests
-export GOLANG_SAMPLES_BIGTABLE_PROJECT=golang-samples-tests
-export GOLANG_SAMPLES_BIGTABLE_INSTANCE=testing-instance
+export GOLANG_SAMPLES_SPANNER=projects/shinfan-mtls-demo/instances/dca-testing-instance
+export GOLANG_SAMPLES_BIGTABLE_PROJECT=shinfan-mtls-demo
+export GOLANG_SAMPLES_BIGTABLE_INSTANCE=dca-testing-instance
 
 export GOLANG_SAMPLES_FIRESTORE_PROJECT=golang-samples-fire-0
 

@@ -118,6 +118,7 @@ func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.C
 	if err != nil {
 		return nil, err
 	}
+
 	var grpcOpts []grpc.DialOption
 	if insecure {
 		grpcOpts = []grpc.DialOption{grpc.WithInsecure()}
@@ -166,6 +167,7 @@ func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.C
 				println(err)
 				return nil, err
 			}
+			println(endpoint)
 			tlsConfig := &tls.Config{
 				ServerName: serverName,
 				Certificates: []tls.Certificate{*cert},

@@ -12,33 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package models
+package main
 
-// [START bigquery_delete_model]
 import (
 	"context"
-	"fmt"
+	"log"
+	"testing"
 
-	"cloud.google.com/go/bigquery"
+	"golang.org/x/oauth2/google"
+	"github.com/shinfan/google-dca-test/internal/testutil"
+	container "google.golang.org/api/container/v1"
 )
 
-// deleteModel demonstrates deletion of BigQuery ML model.
-func deleteModel(projectID, datasetID, modelID string) error {
-	// projectID := "my-project-id"
-	// datasetID := "mydataset"
-	// modelID := "mymodel"
+func TestSample(t *testing.T) {
+	tc := testutil.EndToEndTest(t)
+
 	ctx := context.Background()
-	client, err := bigquery.NewClient(ctx, projectID)
+	hc, err := google.DefaultClient(ctx, container.CloudPlatformScope)
 	if err != nil {
-		return fmt.Errorf("bigquery.NewClient: %v", err)
+		log.Fatalf("Could not get authenticated client: %v", err)
 	}
-	defer client.Close()
 
-	model := client.Dataset(datasetID).Model(modelID)
-	if err := model.Delete(ctx); err != nil {
-		return fmt.Errorf("Delete: %v", err)
+	svc, err := container.New(hc)
+	if err != nil {
+		log.Fatalf("Could not initialize gke client: %v", err)
 	}
-	return nil
+
+	if err := listClusters(svc, tc.ProjectID, "us-central1-c"); err != nil {
+		log.Fatal(err)
+	}
 }
-
-// [END bigquery_delete_model]

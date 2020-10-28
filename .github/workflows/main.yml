@@ -74,3 +74,99 @@ jobs:
         NEGATIVE_TEST: 1
         GOOGLE_API_USE_CLIENT_CERTIFICATE: false
       run: ./testing/dca/system_tests.sh
+  bq-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud BigQuery DCA Test
+      env:
+        TESTING_DIR: bigquery
+      run: ./testing/dca/system_tests.sh
+  bq-no-cert-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud BigQuery DCA Test
+      env:
+        TESTING_DIR: bigquery
+        NEGATIVE_TEST: 1
+        GOOGLE_API_USE_CLIENT_CERTIFICATE: false
+      run: ./testing/dca/system_tests.sh
+  spanner-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Bigtable DCA Test
+      env:
+        TESTING_DIR: spanner
+      run: ./testing/dca/system_tests.sh
+  spanner-no-cert-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Bigtable DCA Test
+      env:
+        TESTING_DIR: spanner
+        NEGATIVE_TEST: 1
+        GOOGLE_API_USE_CLIENT_CERTIFICATE: false
+      run: ./testing/dca/system_tests.sh
+  container-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Container DCA Test
+      env:
+        TESTING_DIR: container
+      run: ./testing/dca/system_tests.sh
+  container-no-cert-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Container DCA Test
+      env:
+        TESTING_DIR: container
+        NEGATIVE_TEST: 1
+        GOOGLE_API_USE_CLIENT_CERTIFICATE: false
+      run: ./testing/dca/system_tests.sh
+  logging-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Logging DCA Test
+      env:
+        TESTING_DIR: logging
+      run: ./testing/dca/system_tests.sh
+  logging-no-cert-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Logging DCA Test
+      env:
+        TESTING_DIR: logging
+        NEGATIVE_TEST: 1
+        GOOGLE_API_USE_CLIENT_CERTIFICATE: false
+      run: ./testing/dca/system_tests.sh

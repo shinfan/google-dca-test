@@ -4,6 +4,18 @@ go 1.11
 
 replace google.golang.org/api => ./api
 
+replace cloud.google.com/go => github.com/googleapis/google-cloud-go v0.70.1-0.20201027002940-a0982f79d646
+
+replace cloud.google.com/go/pubsub => github.com/googleapis/google-cloud-go/pubsub v1.8.3-0.20201027002940-a0982f79d646
+
+replace cloud.google.com/go/bigquery => github.com/googleapis/google-cloud-go/bigquery v1.12.1-0.20201027002940-a0982f79d646
+
+replace cloud.google.com/go/spanner => github.com/googleapis/google-cloud-go/spanner v1.11.1-0.20201027002940-a0982f79d646
+
+replace cloud.google.com/go/bigtable => github.com/googleapis/google-cloud-go/bigtable v1.6.1-0.20201027002940-a0982f79d646
+
+replace cloud.google.com/go/logging => github.com/googleapis/google-cloud-go/logging v1.1.2-0.20201027002940-a0982f79d646
+
 require (
 	cloud.google.com/go v0.70.0
 	cloud.google.com/go/bigquery v1.9.0
@@ -22,21 +34,18 @@ require (
 	github.com/google/go-cmp v0.5.2
 	github.com/google/uuid v1.1.2
 	github.com/googleapis/gax-go/v2 v2.0.5
+	github.com/kr/pretty v0.2.1 // indirect
 	github.com/linkedin/goavro/v2 v2.9.8
 	github.com/mailgun/mailgun-go/v3 v3.6.4
 	github.com/mailjet/mailjet-apiv3-go v0.0.0-20190724151621-55e56f74078c
 	github.com/philhofer/fwd v1.0.0 // indirect
 	github.com/sendgrid/smtpapi-go v0.6.0 // indirect
 	github.com/tinylib/msgp v1.1.2 // indirect
-	go.opencensus.io v0.22.5
-	golang.org/x/net v0.0.0-20201020065357-d65d470038a5 // indirect
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
-	golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f
-	golang.org/x/tools v0.0.0-20201020123448-f5c826d1900e // indirect
-	google.golang.org/api v0.33.0
+	google.golang.org/api v0.34.0
 	google.golang.org/appengine v1.6.6
-	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154
-	google.golang.org/grpc v1.32.0
+	google.golang.org/genproto v0.0.0-20201026171402-d4b8fe4fd877
+	google.golang.org/grpc v1.33.1
 	gopkg.in/sendgrid/sendgrid-go.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )

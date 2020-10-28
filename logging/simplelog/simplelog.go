@@ -94,6 +94,7 @@ func main() {
 
 func writeEntry(client *logging.Client) {
 	// [START logging_write_log_entry]
+	println("Start write entry")
 	const name = "log-example"
 	logger := client.Logger(name)
 	defer logger.Flush() // Ensure the entry is written.
@@ -104,6 +105,7 @@ func writeEntry(client *logging.Client) {
 }
 
 func structuredWrite(client *logging.Client) {
+	println("Start structured write entry")
 	// [START write_structured_log_entry]
 	const name = "log-example"
 	logger := client.Logger(name)
@@ -132,6 +134,7 @@ func deleteLog(adminClient *logadmin.Client) error {
 }
 
 func getEntries(adminClient *logadmin.Client, projID string) ([]*logging.Entry, error) {
+	println("Start getting entries")
 	ctx := context.Background()
 
 	// [START logging_list_log_entries]
@@ -144,15 +147,20 @@ func getEntries(adminClient *logadmin.Client, projID string) ([]*logging.Entry, 
 		logadmin.NewestFirst(),
 	)
 
-	// Fetch the most recent 20 entries.
-	for len(entries) < 20 {
+	println("Fetching the most recent 20 entries")
+	// Fetch the most recent 5 entries.
+	for len(entries) < 5 {
+		println("Fetching the most recent entries")
 		entry, err := iter.Next()
 		if err == iterator.Done {
+			println("Done fetching")
 			return entries, nil
 		}
 		if err != nil {
+			println("Found error")
 			return nil, err
 		}
+		println(entry)
 		entries = append(entries, entry)
 	}
 	return entries, nil

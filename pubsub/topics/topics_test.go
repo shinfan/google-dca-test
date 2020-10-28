@@ -23,7 +23,6 @@ import (
 	"testing"
 
 	"cloud.google.com/go/pubsub"
-	"google.golang.org/api/option"
 	"github.com/shinfan/google-dca-test/internal/testutil"
 )
 
@@ -39,8 +38,8 @@ func setup(t *testing.T) *pubsub.Client {
 
 	topicID = "test-topic"
 	var err error
-	println("Project ID: " + tc.ProjectID)
-	client, err := pubsub.NewClient(ctx, tc.ProjectID, option.WithEndpoint("pubsub.mtls.googleapis.com:443"))
+	println(tc.ProjectID)
+	client, err := pubsub.NewClient(ctx, tc.ProjectID)
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err.Error())
 	}
@@ -63,6 +62,7 @@ func setup(t *testing.T) *pubsub.Client {
 }
 
 func TestCreate(t *testing.T) {
+	println("start test")
 	client := setup(t)
 	tc := testutil.SystemTest(t)
 	buf := new(bytes.Buffer)

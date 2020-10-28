@@ -16,11 +16,10 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"strings"
 	"testing"
 	"time"
 
+	"google.golang.org/api/option"
 	"cloud.google.com/go/logging"
 	"cloud.google.com/go/logging/logadmin"
 
@@ -31,22 +30,24 @@ func TestSimplelog(t *testing.T) {
 	tc := testutil.SystemTest(t)
 	ctx := context.Background()
 
-	client, err := logging.NewClient(ctx, tc.ProjectID)
+	client, err := logging.NewClient(ctx, tc.ProjectID, option.WithEndpoint("logging.mtls.googleapis.com:443"))
 	if err != nil {
 		t.Fatalf("logging.NewClient: %v", err)
 	}
-	adminClient, err := logadmin.NewClient(ctx, tc.ProjectID)
+	adminClient, err := logadmin.NewClient(ctx, tc.ProjectID, option.WithEndpoint("logging.mtls.googleapis.com:443"))
 	if err != nil {
 		t.Fatalf("logadmin.NewClient: %v", err)
 	}
 	defer func() {
+		println("Close Client")
 		if err := client.Close(); err != nil {
 			t.Errorf("Close: %v", err)
 		}
 	}()
 
 	defer func() {
-		testutil.Retry(t, 10, 5*time.Second, func(r *testutil.R) {
+		println("Deleting log")
+		testutil.Retry(t, 1, 5*time.Second, func(r *testutil.R) {
 			if err := deleteLog(adminClient); err != nil {
 				r.Errorf("deleteLog: %v", err)
 			}
@@ -59,30 +60,4 @@ func TestSimplelog(t *testing.T) {
 
 	writeEntry(client)
 	structuredWrite(client)
-
-	testutil.Retry(t, 20, 10*time.Second, func(r *testutil.R) {
-		entries, err := getEntries(adminClient, tc.ProjectID)
-		if err != nil {
-			r.Errorf("getEntries: %v", err)
-			return
-		}
-
-		if got, want := len(entries), 2; got != want {
-			r.Errorf("len(entries) = %d; want %d", got, want)
-			return
-		}
-
-		wantContain := map[string]*logging.Entry{
-			"Anything":                            entries[0],
-			"The payload can be any type!":        entries[0],
-			"infolog is a standard Go log.Logger": entries[1],
-		}
-
-		for want, entry := range wantContain {
-			msg := fmt.Sprintf("%s", entry.Payload)
-			if !strings.Contains(msg, want) {
-				r.Errorf("want %q to contain %q", msg, want)
-			}
-		}
-	})
 }
