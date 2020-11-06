@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // uploadFile uploads an object.
@@ -30,7 +31,7 @@ func uploadFile(w io.Writer, bucket, object string) error {
 	// bucket := "bucket-name"
 	// object := "object-name"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}
@@ -54,6 +55,7 @@ func uploadFile(w io.Writer, bucket, object string) error {
 	if err := wc.Close(); err != nil {
 		return fmt.Errorf("Writer.Close: %v", err)
 	}
+	println("Blob uploaded: " + object + " with bucket: " + bucket)
 	fmt.Fprintf(w, "Blob %v uploaded.\n", object)
 	return nil
 }

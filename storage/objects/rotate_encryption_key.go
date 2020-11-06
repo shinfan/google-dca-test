@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // rotateEncryptionKey encrypts an object with the newKey.
@@ -31,7 +32,7 @@ func rotateEncryptionKey(w io.Writer, bucket, object string, key, newKey []byte)
 	// key := []byte("encryption-key")
 	// newKey := []byte("new-encryption-key")
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

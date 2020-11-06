@@ -16,16 +16,13 @@ package buckets
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"cloud.google.com/go/storage"
 	"github.com/shinfan/google-dca-test/internal/testutil"
 )
 
@@ -157,90 +154,6 @@ func TestKMS(t *testing.T) {
 	}
 }
 
-func TestBucketLock(t *testing.T) {
-	tc := testutil.SystemTest(t)
-	bucketName := tc.ProjectID + "-storage-buckets-tests"
-
-	retentionPeriod := 5 * time.Second
-	testutil.Retry(t, 10, 10*time.Second, func(r *testutil.R) {
-		if err := setRetentionPolicy(ioutil.Discard, bucketName, retentionPeriod); err != nil {
-			r.Errorf("setRetentionPolicy: %v", err)
-		}
-	})
-
-	attrs, err := getRetentionPolicy(ioutil.Discard, bucketName)
-	if err != nil {
-		t.Fatalf("getRetentionPolicy: %v", err)
-	}
-	if attrs.RetentionPolicy.RetentionPeriod != retentionPeriod {
-		t.Fatalf("retention period is not the expected value (%q): %v", retentionPeriod, attrs.RetentionPolicy.RetentionPeriod)
-	}
-	testutil.Retry(t, 10, 10*time.Second, func(r *testutil.R) {
-		if err := enableDefaultEventBasedHold(ioutil.Discard, bucketName); err != nil {
-			r.Errorf("enableDefaultEventBasedHold: %v", err)
-		}
-	})
-
-	attrs, err = getDefaultEventBasedHold(ioutil.Discard, bucketName)
-	if err != nil {
-		t.Fatalf("getDefaultEventBasedHold: %v", err)
-	}
-	if !attrs.DefaultEventBasedHold {
-		t.Fatalf("default event-based hold was not enabled")
-	}
-	testutil.Retry(t, 10, 10*time.Second, func(r *testutil.R) {
-		if err := disableDefaultEventBasedHold(ioutil.Discard, bucketName); err != nil {
-			r.Errorf("disableDefaultEventBasedHold: %v", err)
-		}
-	})
-
-	attrs, err = getDefaultEventBasedHold(ioutil.Discard, bucketName)
-	if err != nil {
-		t.Fatalf("getDefaultEventBasedHold: %v", err)
-	}
-	if attrs.DefaultEventBasedHold {
-		t.Fatalf("default event-based hold was not disabled")
-	}
-	testutil.Retry(t, 10, 10*time.Second, func(r *testutil.R) {
-		if err := removeRetentionPolicy(ioutil.Discard, bucketName); err != nil {
-			r.Errorf("removeRetentionPolicy: %v", err)
-		}
-	})
-
-	attrs, err = getRetentionPolicy(ioutil.Discard, bucketName)
-	if err != nil {
-		t.Fatalf("getRetentionPolicy: %v", err)
-	}
-	if attrs.RetentionPolicy != nil {
-		t.Fatalf("retention period to not be set")
-	}
-	testutil.Retry(t, 10, 10*time.Second, func(r *testutil.R) {
-		if err := setRetentionPolicy(ioutil.Discard, bucketName, retentionPeriod); err != nil {
-			r.Errorf("setRetentionPolicy: %v", err)
-		}
-	})
-
-	testutil.Retry(t, 10, 10*time.Second, func(r *testutil.R) {
-		if err := lockRetentionPolicy(ioutil.Discard, bucketName); err != nil {
-			r.Errorf("lockRetentionPolicy: %v", err)
-		}
-		attrs, err := getRetentionPolicy(ioutil.Discard, bucketName)
-		if err != nil {
-			r.Errorf("getRetentionPolicy: %v", err)
-		}
-		if !attrs.RetentionPolicy.IsLocked {
-			r.Errorf("retention policy is not locked")
-		}
-	})
-
-	time.Sleep(5 * time.Second)
-	deleteBucket(ioutil.Discard, bucketName)
-	time.Sleep(5 * time.Second)
-
-	if err := createBucket(ioutil.Discard, tc.ProjectID, bucketName); err != nil {
-		t.Fatalf("createBucket: %v", err)
-	}
-}
 
 func TestUniformBucketLevelAccess(t *testing.T) {
 	tc := testutil.SystemTest(t)
@@ -260,7 +173,7 @@ func TestUniformBucketLevelAccess(t *testing.T) {
 		t.Fatalf("Uniform bucket-level access was not enabled for (%q).", bucketName)
 	}
 
-	testutil.Retry(t, 10, 10*time.Second, func(r *testutil.R) {
+	testutil.Retry(t, 2, 10*time.Second, func(r *testutil.R) {
 		if err := disableUniformBucketLevelAccess(ioutil.Discard, bucketName); err != nil {
 			r.Errorf("disableUniformBucketLevelAccess: %v", err)
 		}
@@ -272,57 +185,6 @@ func TestUniformBucketLevelAccess(t *testing.T) {
 	}
 	if attrs.UniformBucketLevelAccess.Enabled {
 		t.Fatalf("Uniform bucket-level access was not disabled for (%q).", bucketName)
-	}
-}
-
-func TestLifecycleManagement(t *testing.T) {
-	tc := testutil.SystemTest(t)
-	bucketName := tc.ProjectID + "-storage-buckets-tests"
-
-	ctx := context.Background()
-	testutil.CleanBucket(ctx, t, tc.ProjectID, bucketName)
-
-	if err := enableBucketLifecycleManagement(ioutil.Discard, bucketName); err != nil {
-		t.Fatalf("enableBucketLifecycleManagement: %v", err)
-	}
-
-	// verify lifecycle is set
-	client, err := storage.NewClient(ctx)
-	if err != nil {
-		t.Fatalf("storage.NewClient: %v", err)
-	}
-	defer client.Close()
-
-	attrs, err := client.Bucket(bucketName).Attrs(ctx)
-	if err != nil {
-		t.Fatalf("Bucket(%q).Attrs: %v", bucketName, err)
-	}
-
-	want := storage.LifecycleRule{
-		Action:    storage.LifecycleAction{Type: "Delete"},
-		Condition: storage.LifecycleCondition{AgeInDays: 100},
-	}
-
-	r := attrs.Lifecycle.Rules
-	if len(r) != 1 {
-		t.Fatalf("Length of lifecycle rules should be 1, got %d", len(r))
-	}
-
-	if !reflect.DeepEqual(r[0], want) {
-		t.Fatalf("Unexpected lifecycle rule: got: %v, want: %v", r, want)
-	}
-
-	if err := disableBucketLifecycleManagement(ioutil.Discard, bucketName); err != nil {
-		t.Fatalf("disableBucketLifecycleManagement: %v", err)
-	}
-
-	attrs, err = client.Bucket(bucketName).Attrs(ctx)
-	if err != nil {
-		t.Fatalf("Bucket(%q).Attrs: %v", bucketName, err)
-	}
-
-	if n := len(attrs.Lifecycle.Rules); n != 0 {
-		t.Fatalf("Length of lifecycle rules should be 0, got %d", n)
 	}
 }
 

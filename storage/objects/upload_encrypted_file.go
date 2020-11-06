@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // uploadEncryptedFile writes an object using AES-256 encryption key.
@@ -30,7 +31,7 @@ func uploadEncryptedFile(w io.Writer, bucket, object string, secretKey []byte) e
 	// object := "object-name"
 	// secretKey := []byte("secret-key")
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

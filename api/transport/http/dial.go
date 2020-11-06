@@ -34,6 +34,7 @@ func NewClient(ctx context.Context, opts ...option.ClientOption) (*http.Client, 
 		return nil, "", err
 	}
 	clientCertSource, endpoint, err := dca.GetClientCertificateSourceAndEndpoint(settings)
+	println("Endpoint used: " + endpoint)
 	if err != nil {
 		return nil, "", err
 	}

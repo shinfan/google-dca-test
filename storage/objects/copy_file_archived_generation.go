@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package buckets
+package objects
 
-// [START storage_set_retention_policy]
+// [START storage_copy_file_archived_generation]
 import (
 	"context"
 	"fmt"
@@ -25,10 +25,14 @@ import (
 	"google.golang.org/api/option"
 )
 
-// setRetentionPolicy sets the bucket retention period.
-func setRetentionPolicy(w io.Writer, bucketName string, retentionPeriod time.Duration) error {
-	// bucketName := "bucket-name"
-	// retentionPeriod := time.Second
+// copyOldVersionOfObject copies a noncurrent version of an object.
+func copyOldVersionOfObject(w io.Writer, bucket, srcObject, dstObject string, gen int64) error {
+	// bucket := "bucket-name"
+	// srcObject := "source-object-name"
+	// dstObject := "destination-object-name"
+
+	// gen is the generation of srcObject to copy.
+	// gen := 1587012235914578
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
@@ -39,17 +43,14 @@ func setRetentionPolicy(w io.Writer, bucketName string, retentionPeriod time.Dur
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
-	bucket := client.Bucket(bucketName)
-	bucketAttrsToUpdate := storage.BucketAttrsToUpdate{
-		RetentionPolicy: &storage.RetentionPolicy{
-			RetentionPeriod: retentionPeriod,
-		},
+	src := client.Bucket(bucket).Object(srcObject)
+	dst := client.Bucket(bucket).Object(dstObject)
+
+	if _, err := dst.CopierFrom(src.Generation(gen)).Run(ctx); err != nil {
+		return fmt.Errorf("Object(%q).CopierFrom(%q).Generation(%v).Run: %v", dstObject, srcObject, gen, err)
 	}
-	if _, err := bucket.Update(ctx, bucketAttrsToUpdate); err != nil {
-		return fmt.Errorf("Bucket(%q).Update: %v", bucketName, err)
-	}
-	fmt.Fprintf(w, "Retention policy for %v was set to %v\n", bucketName, bucketAttrsToUpdate.RetentionPolicy.RetentionPeriod)
+	fmt.Fprintf(w, "Generation %v of object %v in bucket %v was copied to %v\n", gen, srcObject, bucket, dstObject)
 	return nil
 }
 
-// [END storage_set_retention_policy]
+// [END storage_copy_file_archived_generation]

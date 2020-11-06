@@ -21,6 +21,7 @@ import (
 	"io"
 	"time"
 
+	"google.golang.org/api/option"
 	"cloud.google.com/go/storage"
 )
 
@@ -28,7 +29,7 @@ import (
 func deleteBucket(w io.Writer, bucketName string) error {
 	// bucketName := "bucket-name"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // downloadFile downloads an object.
@@ -30,7 +31,7 @@ func downloadFile(w io.Writer, bucket, object string) ([]byte, error) {
 	// bucket := "bucket-name"
 	// object := "object-name"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.googleapis.com/storage/v1/"))
 	if err != nil {
 		return nil, fmt.Errorf("storage.NewClient: %v", err)
 	}

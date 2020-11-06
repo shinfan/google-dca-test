@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // getMetadata prints all of the object attributes.
@@ -29,7 +30,7 @@ func getMetadata(w io.Writer, bucket, object string) (*storage.ObjectAttrs, erro
 	// bucket := "bucket-name"
 	// object := "object-name"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return nil, fmt.Errorf("storage.NewClient: %v", err)
 	}
@@ -63,6 +64,7 @@ func getMetadata(w io.Writer, bucket, object string) (*storage.ObjectAttrs, erro
 	fmt.Fprintf(w, "Event-based hold enabled? %t\n", attrs.EventBasedHold)
 	fmt.Fprintf(w, "Temporary hold enabled? %t\n", attrs.TemporaryHold)
 	fmt.Fprintf(w, "Retention expiration time %v\n", attrs.RetentionExpirationTime)
+	fmt.Fprintf(w, "Custom time %v\n", attrs.CustomTime)
 	fmt.Fprintf(w, "\n\nMetadata\n")
 	for key, value := range attrs.Metadata {
 		fmt.Fprintf(w, "\t%v = %v\n", key, value)

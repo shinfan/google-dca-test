@@ -23,6 +23,7 @@ import (
 
 	"cloud.google.com/go/storage"
 	"google.golang.org/api/iterator"
+	"google.golang.org/api/option"
 )
 
 // listFilesWithPrefix lists objects using prefix and delimeter.
@@ -31,7 +32,7 @@ func listFilesWithPrefix(w io.Writer, bucket, prefix, delim string) error {
 	// prefix := "/foo"
 	// delim := "_"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

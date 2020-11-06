@@ -23,13 +23,14 @@ import (
 
 	"cloud.google.com/go/iam"
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // getBucketPolicy gets the bucket IAM policy.
 func getBucketPolicy(w io.Writer, bucketName string) (*iam.Policy, error) {
 	// bucketName := "bucket-name"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return nil, fmt.Errorf("storage.NewClient: %v", err)
 	}

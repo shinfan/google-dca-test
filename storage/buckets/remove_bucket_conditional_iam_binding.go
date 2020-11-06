@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // removeBucketConditionalIAMBinding removes bucket conditional IAM binding.
@@ -32,7 +33,7 @@ func removeBucketConditionalIAMBinding(w io.Writer, bucketName, role, title, des
 	// description := "condition description"
 	// expression := "condition expression"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

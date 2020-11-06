@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // createBucketClassLocation creates a new bucket in the project with Storage class and
@@ -30,7 +31,7 @@ func createBucketClassLocation(w io.Writer, projectID, bucketName string) error 
 	// projectID := "my-project-id"
 	// bucketName := "bucket-name"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

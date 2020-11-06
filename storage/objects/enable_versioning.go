@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package buckets
+package objects
 
-// [START storage_set_retention_policy]
+// [START storage_enable_versioning]
 import (
 	"context"
 	"fmt"
@@ -25,10 +25,9 @@ import (
 	"google.golang.org/api/option"
 )
 
-// setRetentionPolicy sets the bucket retention period.
-func setRetentionPolicy(w io.Writer, bucketName string, retentionPeriod time.Duration) error {
+// enableVersioning enables object versioning on a bucket.
+func enableVersioning(w io.Writer, bucketName string) error {
 	// bucketName := "bucket-name"
-	// retentionPeriod := time.Second
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
@@ -41,15 +40,13 @@ func setRetentionPolicy(w io.Writer, bucketName string, retentionPeriod time.Dur
 
 	bucket := client.Bucket(bucketName)
 	bucketAttrsToUpdate := storage.BucketAttrsToUpdate{
-		RetentionPolicy: &storage.RetentionPolicy{
-			RetentionPeriod: retentionPeriod,
-		},
+		VersioningEnabled: true,
 	}
 	if _, err := bucket.Update(ctx, bucketAttrsToUpdate); err != nil {
 		return fmt.Errorf("Bucket(%q).Update: %v", bucketName, err)
 	}
-	fmt.Fprintf(w, "Retention policy for %v was set to %v\n", bucketName, bucketAttrsToUpdate.RetentionPolicy.RetentionPeriod)
+	fmt.Fprintf(w, "Versioning was enabled for %v\n", bucketName)
 	return nil
 }
 
-// [END storage_set_retention_policy]
+// [END storage_enable_versioning]

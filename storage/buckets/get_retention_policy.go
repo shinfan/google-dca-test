@@ -22,13 +22,14 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // getRetentionPolicy gets bucket retention policy.
 func getRetentionPolicy(w io.Writer, bucketName string) (*storage.BucketAttrs, error) {
 	// bucketName := "bucket-name"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return nil, fmt.Errorf("storage.NewClient: %v", err)
 	}

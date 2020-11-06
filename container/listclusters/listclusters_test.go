@@ -19,21 +19,14 @@ import (
 	"log"
 	"testing"
 
-	"golang.org/x/oauth2/google"
 	"github.com/shinfan/google-dca-test/internal/testutil"
 	container "google.golang.org/api/container/v1"
 )
 
 func TestSample(t *testing.T) {
 	tc := testutil.EndToEndTest(t)
-
-	ctx := context.Background()
-	hc, err := google.DefaultClient(ctx, container.CloudPlatformScope)
-	if err != nil {
-		log.Fatalf("Could not get authenticated client: %v", err)
-	}
-
-	svc, err := container.New(hc)
+	println("Start test")
+	svc, err := container.NewService(context.Background())
 	if err != nil {
 		log.Fatalf("Could not initialize gke client: %v", err)
 	}

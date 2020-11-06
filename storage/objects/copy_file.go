@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // copyFile copies an object into specified bucket.
@@ -30,7 +31,7 @@ func copyFile(w io.Writer, dstBucket, srcBucket, srcObject string) error {
 	// srcBucket := "bucket-2"
 	// srcObject := "object"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

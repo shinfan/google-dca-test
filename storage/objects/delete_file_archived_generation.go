@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package buckets
+package objects
 
-// [START storage_set_retention_policy]
+// [START storage_delete_file_archived_generation]
 import (
 	"context"
 	"fmt"
@@ -25,10 +25,13 @@ import (
 	"google.golang.org/api/option"
 )
 
-// setRetentionPolicy sets the bucket retention period.
-func setRetentionPolicy(w io.Writer, bucketName string, retentionPeriod time.Duration) error {
+// deleteOldVersionOfObject deletes a noncurrent version of an object.
+func deleteOldVersionOfObject(w io.Writer, bucketName, objectName string, gen int64) error {
 	// bucketName := "bucket-name"
-	// retentionPeriod := time.Second
+	// objectName := "object-name"
+
+	// gen is the generation of objectName to delete.
+	// gen := 1587012235914578
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
@@ -39,17 +42,12 @@ func setRetentionPolicy(w io.Writer, bucketName string, retentionPeriod time.Dur
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
-	bucket := client.Bucket(bucketName)
-	bucketAttrsToUpdate := storage.BucketAttrsToUpdate{
-		RetentionPolicy: &storage.RetentionPolicy{
-			RetentionPeriod: retentionPeriod,
-		},
+	obj := client.Bucket(bucketName).Object(objectName)
+	if err := obj.Generation(gen).Delete(ctx); err != nil {
+		return fmt.Errorf("Bucket(%q).Object(%q).Generation(%v).Delete: %v", bucketName, objectName, gen, err)
 	}
-	if _, err := bucket.Update(ctx, bucketAttrsToUpdate); err != nil {
-		return fmt.Errorf("Bucket(%q).Update: %v", bucketName, err)
-	}
-	fmt.Fprintf(w, "Retention policy for %v was set to %v\n", bucketName, bucketAttrsToUpdate.RetentionPolicy.RetentionPeriod)
+	fmt.Fprintf(w, "Generation %v of object %v was deleted from %v\n", gen, objectName, bucketName)
 	return nil
 }
 
-// [END storage_set_retention_policy]
+// [END storage_delete_file_archived_generation]

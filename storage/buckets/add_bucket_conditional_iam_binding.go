@@ -24,6 +24,7 @@ import (
 	"cloud.google.com/go/storage"
 	iampb "google.golang.org/genproto/googleapis/iam/v1"
 	"google.golang.org/genproto/googleapis/type/expr"
+	"google.golang.org/api/option"
 )
 
 // addBucketConditionalIAMBinding adds bucket conditional IAM binding.
@@ -35,7 +36,7 @@ func addBucketConditionalIAMBinding(w io.Writer, bucketName, role, member, title
 	// description := "condition description"
 	// expression := "condition expression"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

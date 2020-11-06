@@ -16,6 +16,8 @@ replace cloud.google.com/go/bigtable => github.com/googleapis/google-cloud-go/bi
 
 replace cloud.google.com/go/logging => github.com/googleapis/google-cloud-go/logging v1.1.2-0.20201027002940-a0982f79d646
 
+replace cloud.google.com/go/storage => github.com/googleapis/google-cloud-go/storage v1.1.2-0.20201027002940-a0982f79d646
+
 require (
 	cloud.google.com/go v0.70.0
 	cloud.google.com/go/bigquery v1.9.0
@@ -25,6 +27,7 @@ require (
 	cloud.google.com/go/pubsub v1.6.1
 	cloud.google.com/go/spanner v1.10.0
 	cloud.google.com/go/storage v1.11.0
+	github.com/GoogleCloudPlatform/golang-samples v0.0.0-20201029203259-a11d96b5e5cc
 	github.com/aws/aws-sdk-go v1.34.18
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/fluent/fluent-logger-golang v1.5.0

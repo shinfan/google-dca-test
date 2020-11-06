@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package buckets
+package objects
 
-// [START storage_set_retention_policy]
+// [START storage_list_file_archived_generations]
 import (
 	"context"
 	"fmt"
@@ -22,13 +22,13 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )
 
-// setRetentionPolicy sets the bucket retention period.
-func setRetentionPolicy(w io.Writer, bucketName string, retentionPeriod time.Duration) error {
-	// bucketName := "bucket-name"
-	// retentionPeriod := time.Second
+// listFilesAllVersion lists both live and noncurrent versions of objects within specified bucket.
+func listFilesAllVersion(w io.Writer, bucket string) error {
+	// bucket := "bucket-name"
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
@@ -39,17 +39,21 @@ func setRetentionPolicy(w io.Writer, bucketName string, retentionPeriod time.Dur
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
-	bucket := client.Bucket(bucketName)
-	bucketAttrsToUpdate := storage.BucketAttrsToUpdate{
-		RetentionPolicy: &storage.RetentionPolicy{
-			RetentionPeriod: retentionPeriod,
-		},
+	it := client.Bucket(bucket).Objects(ctx, &storage.Query{
+		// Versions true to output all generations of objects
+		Versions: true,
+	})
+	for {
+		attrs, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return fmt.Errorf("Bucket(%q).Objects(): %v", bucket, err)
+		}
+		fmt.Fprintln(w, attrs.Name, attrs.Generation, attrs.Metageneration)
 	}
-	if _, err := bucket.Update(ctx, bucketAttrsToUpdate); err != nil {
-		return fmt.Errorf("Bucket(%q).Update: %v", bucketName, err)
-	}
-	fmt.Fprintf(w, "Retention policy for %v was set to %v\n", bucketName, bucketAttrsToUpdate.RetentionPolicy.RetentionPeriod)
 	return nil
 }
 
-// [END storage_set_retention_policy]
+// [END storage_list_file_archived_generations]

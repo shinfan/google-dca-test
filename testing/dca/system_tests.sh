@@ -33,25 +33,12 @@ date
 
 export GO111MODULE=on # Always use modules.
 export GOPROXY=https://proxy.golang.org
+export GOLANG_SAMPLES_E2E_TEST=1
 TIMEOUT=60m
 
 # Don't print environment variables in case there are secrets.
 # If you need a secret, use a keystore_resource in common.cfg.
-set +x
-
-export GOLANG_SAMPLES_KMS_KEYRING=ring1
-export GOLANG_SAMPLES_KMS_CRYPTOKEY=key1
-
-export GCLOUD_ORGANIZATION=1081635000895
-export SCC_PUBSUB_PROJECT="project-a-id"
-export SCC_PUBSUB_TOPIC="projects/project-a-id/topics/notifications-sample-topic"
-export SCC_PUBSUB_SUBSCRIPTION="notification-sample-subscription"
-
-export GOLANG_SAMPLES_SPANNER=projects/shinfan-mtls-demo/instances/dca-testing-instance
-export GOLANG_SAMPLES_BIGTABLE_PROJECT=shinfan-mtls-demo
-export GOLANG_SAMPLES_BIGTABLE_INSTANCE=dca-testing-instance
-
-export GOLANG_SAMPLES_FIRESTORE_PROJECT=golang-samples-fire-0
+set +x 
 
 echo $CREDENTIALS > ~/secret.json
 export GOOGLE_APPLICATION_CREDENTIALS=~/secret.json

@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // downloadUsingRequesterPays downloads an object using billing project.
@@ -31,7 +32,7 @@ func downloadUsingRequesterPays(w io.Writer, bucket, object, billingProjectID st
 	// object := "object-name"
 	// billingProjectID := "billing_account_id"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}

@@ -32,6 +32,7 @@ import (
 	"google.golang.org/api/iterator"
 	iampb "google.golang.org/genproto/googleapis/iam/v1"
 	"google.golang.org/genproto/googleapis/type/expr"
+	"google.golang.org/api/option"
 )
 
 func main() {
@@ -44,7 +45,7 @@ func main() {
 	}
 
 	// [START setup]
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		log.Fatal(err)
 	}

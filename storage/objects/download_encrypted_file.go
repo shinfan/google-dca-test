@@ -23,6 +23,8 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
+
 )
 
 // downloadEncryptedFile reads an encrypted object.
@@ -31,7 +33,7 @@ func downloadEncryptedFile(w io.Writer, bucket, object string, secretKey []byte)
 	// object := "object-name"
 	// key := []byte("secret-encryption-key")
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return nil, fmt.Errorf("storage.NewClient: %v", err)
 	}

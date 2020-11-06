@@ -59,7 +59,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -437,7 +437,7 @@ func rotateEncryptionKey(client *storage.Client, bucket, object string, key, new
 	// [START storage_rotate_encryption_key]
 	ctx := context.Background()
 
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return err
 	}

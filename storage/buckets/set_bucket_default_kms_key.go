@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // setBucketDefaultKMSKey sets the Cloud KMS encryption key for the bucket.
@@ -29,7 +30,7 @@ func setBucketDefaultKMSKey(w io.Writer, bucketName, keyName string) error {
 	// bucketName := "bucket-name"
 	// keyName := "key"
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx, option.WithEndpoint("https://storage.mtls.googleapis.com/storage/v1/"))
 	if err != nil {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}
