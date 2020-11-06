@@ -140,7 +140,6 @@ func TestObjects(t *testing.T) {
 
 	data, err := downloadFile(ioutil.Discard, bucket, object1)
 	if err != nil {
-		println("bucket downloading: " + bucket)
 		t.Fatalf("downloadFile: %v", err)
 	}
 	if got, want := string(data), "Hello\nworld"; got != want {
