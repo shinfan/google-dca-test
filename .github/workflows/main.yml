@@ -180,3 +180,27 @@ jobs:
         NEGATIVE_TEST: 1
         GOOGLE_API_USE_CLIENT_CERTIFICATE: false
       run: ./testing/dca/system_tests.sh
+  storage-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Storage DCA Test
+      env:
+        TESTING_DIR: logging
+      run: ./testing/dca/system_tests.sh
+  storage-no-cert-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Storage DCA Test
+      env:
+        TESTING_DIR: storage
+        NEGATIVE_TEST: 1
+        GOOGLE_API_USE_CLIENT_CERTIFICATE: false
+      run: ./testing/dca/system_tests.sh
