@@ -115,6 +115,7 @@ func dial(ctx context.Context, insecure bool, o *internal.DialSettings) (*grpc.C
 		return o.GRPCConn, nil
 	}
 	clientCertSource, endpoint, err := dca.GetClientCertificateSourceAndEndpoint(o)
+	println("endpoint: " + endpoint)
 	if err != nil {
 		return nil, err
 	}
