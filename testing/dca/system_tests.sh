@@ -53,7 +53,7 @@ cp ./testing/dca/context_aware_metadata.json ~/.secureConnect/context_aware_meta
 if [[ $USE_INVALID_CERT = 1 ]]; then
   cp ./testing/dca/invalid_cert ~/cert
 else
-  echo $CLIENT_CERTIFICATE > ~/cert
+  echo -e $CLIENT_CERTIFICATE > ~/cert
 fi
 
 # exit_code collects all of the exit codes of the tests, and is used to set the
