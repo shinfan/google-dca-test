@@ -12,39 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package topics
+package subscriptions
 
-// [START pubsub_quickstart_publisher]
+// [START pubsub_set_subscription_policy]
 import (
 	"context"
 	"fmt"
-	"io"
 
+	"cloud.google.com/go/iam"
 	"cloud.google.com/go/pubsub"
 )
 
-func publish(w io.Writer, projectID, topicID, msg string) error {
+// addUsers adds all IAM users to a subscription.
+func addUsers(projectID, subID string) error {
 	// projectID := "my-project-id"
-	// topicID := "my-topic"
-	// msg := "Hello World"
+	// subID := "my-sub"
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
 		return fmt.Errorf("pubsub.NewClient: %v", err)
 	}
 
-	t := client.Topic(topicID)
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(msg),
-	})
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
+	sub := client.Subscription(subID)
+	policy, err := sub.IAM().Policy(ctx)
 	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+		return fmt.Errorf("Policy: %v", err)
 	}
-	fmt.Fprintf(w, "Published a message; msg ID: %v\n", id)
+	// Other valid prefixes are "serviceAccount:", "user:"
+	// See the documentation for more values.
+	policy.Add(iam.AllUsers, iam.Viewer)
+	policy.Add("group:cloud-logs@google.com", iam.Editor)
+	if err := sub.IAM().SetPolicy(ctx, policy); err != nil {
+		return fmt.Errorf("SetPolicy: %v", err)
+	}
+	// NOTE: It may be necessary to retry this operation if IAM policies are
+	// being modified concurrently. SetPolicy will return an error if the policy
+	// was modified since it was retrieved.
 	return nil
 }
 
-// [END pubsub_quickstart_publisher]
+// [END pubsub_set_subscription_policy]

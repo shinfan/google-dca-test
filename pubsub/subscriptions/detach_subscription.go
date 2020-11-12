@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package topics
+package subscriptions
 
-// [START pubsub_quickstart_publisher]
+// [START pubsub_detach_subscription]
 import (
 	"context"
 	"fmt"
@@ -23,28 +23,29 @@ import (
 	"cloud.google.com/go/pubsub"
 )
 
-func publish(w io.Writer, projectID, topicID, msg string) error {
+func detachSubscription(w io.Writer, projectID, subName string) error {
+	// projectID is the project which contains the topic you manage.
+	// This might differ from the project which contains the subscription
+	// you wish to detach, which can exist in any GCP project.
 	// projectID := "my-project-id"
-	// topicID := "my-topic"
-	// msg := "Hello World"
+	// subName := "projects/some-project/subscriptions/my-sub"
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
 		return fmt.Errorf("pubsub.NewClient: %v", err)
 	}
+	defer client.Close()
 
-	t := client.Topic(topicID)
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(msg),
-	})
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
+	// Call DetachSubscription, which detaches a subscription from
+	// a topic. This can only be done if you have the
+	// `pubsub.topics.detachSubscription` role on the topic.
+	_, err = client.DetachSubscription(ctx, subName)
 	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+		return fmt.Errorf("detach subscription failed: %v", err)
 	}
-	fmt.Fprintf(w, "Published a message; msg ID: %v\n", id)
+
+	fmt.Fprintf(w, "Detached subscription %s", subName)
 	return nil
 }
 
-// [END pubsub_quickstart_publisher]
+// [END pubsub_detach_subscription]

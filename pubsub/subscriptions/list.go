@@ -12,39 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package topics
+package subscriptions
 
-// [START pubsub_quickstart_publisher]
+// [START pubsub_list_subscriptions]
 import (
 	"context"
 	"fmt"
-	"io"
 
 	"cloud.google.com/go/pubsub"
+	"google.golang.org/api/iterator"
 )
 
-func publish(w io.Writer, projectID, topicID, msg string) error {
+func list(projectID string) ([]*pubsub.Subscription, error) {
 	// projectID := "my-project-id"
-	// topicID := "my-topic"
-	// msg := "Hello World"
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
-		return fmt.Errorf("pubsub.NewClient: %v", err)
+		return nil, fmt.Errorf("pubsub.NewClient: %v", err)
 	}
 
-	t := client.Topic(topicID)
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(msg),
-	})
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
-	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+	var subs []*pubsub.Subscription
+	it := client.Subscriptions(ctx)
+	for {
+		s, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("Next: %v", err)
+		}
+		subs = append(subs, s)
 	}
-	fmt.Fprintf(w, "Published a message; msg ID: %v\n", id)
-	return nil
+	return subs, nil
 }
 
-// [END pubsub_quickstart_publisher]
+// [END pubsub_list_subscriptions]

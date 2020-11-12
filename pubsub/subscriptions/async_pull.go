@@ -12,39 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package topics
+package subscriptions
 
-// [START pubsub_quickstart_publisher]
+// [START pubsub_subscriber_async_pull]
+// [START pubsub_quickstart_subscriber]
 import (
 	"context"
 	"fmt"
 	"io"
+	"sync"
 
 	"cloud.google.com/go/pubsub"
 )
 
-func publish(w io.Writer, projectID, topicID, msg string) error {
+func pullMsgs(w io.Writer, projectID, subID string) error {
 	// projectID := "my-project-id"
-	// topicID := "my-topic"
-	// msg := "Hello World"
+	// subID := "my-sub"
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
 		return fmt.Errorf("pubsub.NewClient: %v", err)
 	}
 
-	t := client.Topic(topicID)
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(msg),
+	// Consume 10 messages.
+	var mu sync.Mutex
+	received := 0
+	sub := client.Subscription(subID)
+	cctx, cancel := context.WithCancel(ctx)
+	err = sub.Receive(cctx, func(ctx context.Context, msg *pubsub.Message) {
+		mu.Lock()
+		defer mu.Unlock()
+		fmt.Fprintf(w, "Got message: %q\n", string(msg.Data))
+		msg.Ack()
+		received++
+		if received == 10 {
+			cancel()
+		}
 	})
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
 	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+		return fmt.Errorf("Receive: %v", err)
 	}
-	fmt.Fprintf(w, "Published a message; msg ID: %v\n", id)
 	return nil
 }
 
-// [END pubsub_quickstart_publisher]
+// [END pubsub_subscriber_async_pull]
+// [END pubsub_quickstart_subscriber]

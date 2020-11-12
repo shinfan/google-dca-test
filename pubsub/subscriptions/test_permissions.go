@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package topics
+package subscriptions
 
-// [START pubsub_quickstart_publisher]
+// [START pubsub_test_subscription_permissions]
 import (
 	"context"
 	"fmt"
@@ -23,28 +23,26 @@ import (
 	"cloud.google.com/go/pubsub"
 )
 
-func publish(w io.Writer, projectID, topicID, msg string) error {
+func testPermissions(w io.Writer, projectID, subID string) ([]string, error) {
 	// projectID := "my-project-id"
-	// topicID := "my-topic"
-	// msg := "Hello World"
+	// subID := "my-sub"
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
-		return fmt.Errorf("pubsub.NewClient: %v", err)
+		return nil, fmt.Errorf("pubsub.NewClient: %v", err)
 	}
 
-	t := client.Topic(topicID)
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(msg),
+	sub := client.Subscription(subID)
+	perms, err := sub.IAM().TestPermissions(ctx, []string{
+		"pubsub.subscriptions.consume",
+		"pubsub.subscriptions.update",
 	})
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
 	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+		return nil, fmt.Errorf("TestPermissions: %v", err)
 	}
-	fmt.Fprintf(w, "Published a message; msg ID: %v\n", id)
-	return nil
+	for _, perm := range perms {
+		fmt.Fprintf(w, "Allowed: %v\n", perm)
+	}
+	// [END pubsub_test_subscription_permissions]
+	return perms, nil
 }
-
-// [END pubsub_quickstart_publisher]

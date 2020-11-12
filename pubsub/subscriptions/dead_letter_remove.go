@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package topics
+package subscriptions
 
-// [START pubsub_quickstart_publisher]
+// [START pubsub_dead_letter_remove]
 import (
 	"context"
 	"fmt"
@@ -23,28 +23,24 @@ import (
 	"cloud.google.com/go/pubsub"
 )
 
-func publish(w io.Writer, projectID, topicID, msg string) error {
+// removeDeadLetterTopic removes the dead letter policy from a subscription.
+func removeDeadLetterTopic(w io.Writer, projectID, subID string) error {
 	// projectID := "my-project-id"
-	// topicID := "my-topic"
-	// msg := "Hello World"
+	// subID := "my-sub"
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
 		return fmt.Errorf("pubsub.NewClient: %v", err)
 	}
 
-	t := client.Topic(topicID)
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(msg),
+	subConfig, err := client.Subscription(subID).Update(ctx, pubsub.SubscriptionConfigToUpdate{
+		DeadLetterPolicy: &pubsub.DeadLetterPolicy{},
 	})
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
 	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+		return fmt.Errorf("Update: %v", err)
 	}
-	fmt.Fprintf(w, "Published a message; msg ID: %v\n", id)
+	fmt.Fprintf(w, "Updated subscription config: %+v\n", subConfig)
 	return nil
 }
 
-// [END pubsub_quickstart_publisher]
+// [END pubsub_dead_letter_remove]

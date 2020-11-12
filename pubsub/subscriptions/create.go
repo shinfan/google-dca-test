@@ -12,39 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package topics
+package subscriptions
 
-// [START pubsub_quickstart_publisher]
+// [START pubsub_create_pull_subscription]
 import (
 	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"cloud.google.com/go/pubsub"
 )
 
-func publish(w io.Writer, projectID, topicID, msg string) error {
+func create(w io.Writer, projectID, subID string, topic *pubsub.Topic) error {
 	// projectID := "my-project-id"
-	// topicID := "my-topic"
-	// msg := "Hello World"
+	// subID := "my-sub"
+	// topic of type https://godoc.org/cloud.google.com/go/pubsub#Topic
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
 		return fmt.Errorf("pubsub.NewClient: %v", err)
 	}
 
-	t := client.Topic(topicID)
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(msg),
+	sub, err := client.CreateSubscription(ctx, subID, pubsub.SubscriptionConfig{
+		Topic:       topic,
+		AckDeadline: 20 * time.Second,
 	})
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
 	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+		return fmt.Errorf("CreateSubscription: %v", err)
 	}
-	fmt.Fprintf(w, "Published a message; msg ID: %v\n", id)
+	fmt.Fprintf(w, "Created subscription: %v\n", sub)
 	return nil
 }
 
-// [END pubsub_quickstart_publisher]
+// [END pubsub_create_pull_subscription]

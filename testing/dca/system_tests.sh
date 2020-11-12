@@ -41,7 +41,7 @@ TIMEOUT=60m
 set +x 
 
 echo $CREDENTIALS > ~/secret.json
-export GOOGLE_APPLICATION_CREDENTIALS=~/secret.json
+# export GOOGLE_APPLICATION_CREDENTIALS=~/secret.json
 
 set -x
 

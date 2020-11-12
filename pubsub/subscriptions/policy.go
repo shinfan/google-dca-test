@@ -12,39 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package topics
+package subscriptions
 
-// [START pubsub_quickstart_publisher]
+// [START pubsub_get_subscription_policy]
 import (
 	"context"
 	"fmt"
 	"io"
 
+	"cloud.google.com/go/iam"
 	"cloud.google.com/go/pubsub"
 )
 
-func publish(w io.Writer, projectID, topicID, msg string) error {
+func policy(w io.Writer, projectID, subID string) (*iam.Policy, error) {
 	// projectID := "my-project-id"
-	// topicID := "my-topic"
-	// msg := "Hello World"
+	// subID := "my-sub"
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
-		return fmt.Errorf("pubsub.NewClient: %v", err)
+		return nil, fmt.Errorf("pubsub.NewClient: %v", err)
 	}
 
-	t := client.Topic(topicID)
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(msg),
-	})
-	// Block until the result is returned and a server-generated
-	// ID is returned for the published message.
-	id, err := result.Get(ctx)
+	policy, err := client.Subscription(subID).IAM().Policy(ctx)
 	if err != nil {
-		return fmt.Errorf("Get: %v", err)
+		return nil, fmt.Errorf("Subscription: %v", err)
 	}
-	fmt.Fprintf(w, "Published a message; msg ID: %v\n", id)
-	return nil
+	for _, role := range policy.Roles() {
+		fmt.Fprintf(w, "%q: %q\n", role, policy.Members(role))
+	}
+	return policy, nil
 }
 
-// [END pubsub_quickstart_publisher]
+// [END pubsub_get_subscription_policy]
