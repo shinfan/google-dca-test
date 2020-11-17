@@ -16,7 +16,6 @@
 package instances
 
 import (
-	"fmt"
 	"testing"
 	"time"
 
@@ -65,18 +64,16 @@ func TestInsertThenDelete(t *testing.T) {
 
 func testInsert(t *testing.T) {
 	tc := testutil.SystemTest(t)
-	operation, err := insert(tc.ProjectID, "us-central1-b", "dca-test-instance-2")
+	_, err := insert(tc.ProjectID, "us-central1-b", "dca-test-instance-2")
 	if err != nil {
 		t.Fatalf("failed to insert new instance: %v", err)
 	}
-	fmt.Println(operation)
 }
 
 func testDelete(t *testing.T) {
 	tc := testutil.SystemTest(t)
-	operation, err := delete(tc.ProjectID, "us-central1-b", "dca-test-instance-2")
+	_, err := delete(tc.ProjectID, "us-central1-b", "dca-test-instance-2")
 	if err != nil {
 		t.Fatalf("failed to delete instance: %v", err)
 	}
-	fmt.Println(operation)
 }
