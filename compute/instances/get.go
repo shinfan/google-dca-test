@@ -30,7 +30,7 @@ func get(projectID string, zone string, resourceID string) (*compute.Instance, e
 	}
 	resp, err := computeService.Instances.Get(projectID, zone, resourceID).Context(ctx).Do()
 	if err != nil {
-		return nil, fmt.Errorf("computeService.Instances.Insert: %v", err)
+		return nil, fmt.Errorf("computeService.Instances.Get: %v", err)
 	}
 	return resp, nil
 }
