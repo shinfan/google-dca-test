@@ -237,3 +237,28 @@ jobs:
         NEGATIVE_TEST: 1
         GOOGLE_API_USE_CLIENT_CERTIFICATE: false
       run: ./testing/dca/system_tests.sh
+  compute-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Compute DCA Test
+      env:
+        TESTING_DIR: compute
+      run: ./testing/dca/system_tests.sh
+  compute-no-cert-test:
+    runs-on: ubuntu-latest
+    needs: bigtable-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1'
+    - name: Cloud Compute DCA Test
+      env:
+        TESTING_DIR: compute
+        NEGATIVE_TEST: 1
+        GOOGLE_API_USE_CLIENT_CERTIFICATE: false
+      run: ./testing/dca/system_tests.sh
