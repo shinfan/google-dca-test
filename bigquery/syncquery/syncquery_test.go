@@ -17,7 +17,7 @@ package main
 import (
 	"testing"
 
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
 )
 
 func TestQuery(t *testing.T) {

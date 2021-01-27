@@ -22,7 +22,8 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigtable"
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 )
 
 func TestWrites(t *testing.T) {

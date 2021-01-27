@@ -31,7 +31,8 @@ import (
 	"testing"
 
 	kms "cloud.google.com/go/kms/apiv1"
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 )
 

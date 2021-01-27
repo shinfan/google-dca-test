@@ -19,7 +19,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 )
 
 func TestAggregatedList(t *testing.T) {
