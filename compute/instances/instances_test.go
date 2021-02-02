@@ -38,15 +38,7 @@ func TestList(t *testing.T) {
 	}
 }
 
-func TestGet(t *testing.T) {
-	tc := testutil.SystemTest(t)
-	_, err := get(tc.ProjectID, "us-central1-a", "dca-test-instance-1")
-	if err != nil {
-		t.Fatalf("failed to get instance: %v", err)
-	}
-}
-
-func TestInsertThenDelete(t *testing.T) {
+func TestInsertAndGetAndDelete(t *testing.T) {
 	tc := testutil.SystemTest(t)
 	testInsert(t)
 	// Wait for instance to be created before deleting.
