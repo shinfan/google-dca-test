@@ -23,7 +23,8 @@ import (
 	"cloud.google.com/go/logging"
 	"cloud.google.com/go/logging/logadmin"
 
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 )
 
 func TestSimplelog(t *testing.T) {

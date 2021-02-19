@@ -26,7 +26,8 @@ import (
 
 	"cloud.google.com/go/iam"
 	"cloud.google.com/go/pubsub"
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 )
 
 var topicID string

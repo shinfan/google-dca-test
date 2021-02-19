@@ -21,8 +21,7 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigquery"
-	"google.golang.org/api/option"
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
 )
 
 func TestSimpleApp(t *testing.T) {

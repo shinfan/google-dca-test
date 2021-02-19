@@ -19,7 +19,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 	container "google.golang.org/api/container/v1"
 )
 

@@ -25,7 +25,8 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 	"google.golang.org/api/option"
 
 )

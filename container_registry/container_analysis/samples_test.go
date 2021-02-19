@@ -25,7 +25,8 @@ import (
 
 	containeranalysis "cloud.google.com/go/containeranalysis/apiv1"
 	pubsub "cloud.google.com/go/pubsub"
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 	"github.com/google/uuid"
 	grafeaspb "google.golang.org/genproto/googleapis/grafeas/v1"
 )
