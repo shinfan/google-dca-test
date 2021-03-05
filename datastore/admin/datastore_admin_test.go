@@ -19,7 +19,8 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/shinfan/google-dca-test/internal/testutil"
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+
 )
 
 func TestAdmin(t *testing.T) {
