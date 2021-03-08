@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 // lockRetentionPolicy locks bucket retention policy.
